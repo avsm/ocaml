@@ -549,7 +549,7 @@ module NameChoice(Name : sig
   val get_type: t -> type_expr
   val get_descrs: Env.type_descriptions -> t list
   val fold: (t -> 'a -> 'a) -> Longident.t option -> Env.t -> 'a -> 'a
-  val unbound_name_error: Env.t -> Longident.t loc -> unit
+  val unbound_name_error: Env.t -> Longident.t loc -> 'a
 end) = struct
   open Name
 
@@ -599,7 +599,7 @@ end) = struct
     match opath with
       None ->
 	begin match lbls with
-          [] -> unbound_name_error env lid; assert false
+          [] -> unbound_name_error env lid
 	| (lbl, use) :: rest ->
 	    use ();
 	    if is_ambiguous env lbl rest then
@@ -638,6 +638,7 @@ end) = struct
           if not pr then warn_pr ();
           lbl
 	with Not_found ->
+          if lbls = [] then unbound_name_error env lid else
           let tp = (tpath0, expand_path env tpath) in
 	  let tpl = 
             List.map 
@@ -2898,7 +2899,9 @@ and type_application env funct sargs =
                 (l', sarg0, sargs @ sargs1, sargs2)
             in
             sargs, more_sargs,
-            if optional = Required || is_optional l' then
+            if optional = Required && is_optional l' then
+              raise(Error(sarg0.pexp_loc, Apply_wrong_label(l', ty_fun')))
+            else if optional = Required || is_optional l' then
               Some (fun () -> type_argument env sarg0 ty ty0)
             else begin
               may_warn sarg0.pexp_loc
