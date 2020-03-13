@@ -11,3 +11,5 @@ jobs:
     - uses: actions/checkout@master
     - name: Build
       run: ./tools/ci/actions/actions.sh
+      env:
+        GITHUB_CONTEXT: ${{ toJson(github) }}
