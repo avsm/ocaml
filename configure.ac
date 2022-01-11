@@ -414,6 +414,10 @@ AC_ARG_ENABLE([function-sections],
   [],
   [enable_function_sections=auto])
 
+AC_ARG_ENABLE([mmap-map-stack],
+  [AS_HELP_STRING([--disable-mmap-map-stack],
+    [always use malloc to allocate stacks])])
+
 AC_ARG_WITH([afl],
   [AS_HELP_STRING([--with-afl],
     [use the AFL fuzzer])])
@@ -1909,6 +1913,22 @@ AS_IF([test x"$enable_flat_float_array" = "xno"],
   [flat_float_array=false],
   [AC_DEFINE([FLAT_FLOAT_ARRAY])
   flat_float_array=true])
+
+OCAML_MMAP_SUPPORTS_MAP_STACK
+AS_IF([test x"$enable_mmap_map_stack" = "xyes"],
+  [AS_IF([test x"$has_mmap_map_stack" = "xtrue"],
+    [with_mmap_map_stack=true;
+     AC_DEFINE([USE_MMAP_MAP_STACK])],
+    [AC_MSG_ERROR([mmap MAP_STACK usage requested but not found on $target])])
+  ],
+  [AS_CASE([$target],
+    [*-openbsd*],
+     [with_mmap_map_stack=true;
+      AC_DEFINE([USE_MMAP_MAP_STACK])
+      AC_MSG_NOTICE([using MAP_STACK on OpenBSD due to stack register checking])],
+    [*],
+     [with_mmap_map_stack=false])
+  ])
 
 AS_IF([test x"$enable_function_sections" = "xno"],
   [function_sections=false],
