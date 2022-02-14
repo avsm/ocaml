@@ -62,23 +62,6 @@
 #include "caml/major_gc.h"
 #include "caml/shared_heap.h"
 
-CAMLexport char * caml_strerror(int errnum, char * buf, size_t buflen)
-{
-#ifdef _WIN32
-  /* Windows has a thread-safe strerror */
-  return strerror(errnum);
-#else
-  int res = strerror_r(errnum, buf, buflen);
-  /* glibc<2.13 returns -1/sets errno, >2.13 returns +ve errno.
-     We assume that buffer size is large enough not to get ERANGE,
-     so we assume we got EINVAL. */
-  if (res != 0) {
-    snprintf(buf, buflen, "Unknown error %d", errnum);
-  }
-  return buf;
-#endif
-}
-
 #ifndef EAGAIN
 #define EAGAIN (-1)
 #endif
