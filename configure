@@ -14252,6 +14252,8 @@ esac
  ;; #(
   gcc*,powerpc-*-linux*) :
     oc_ldflags="-mbss-plt" ;; #(
+  *,*-*-openbsd*) :
+    oc_ldflags='-Wl,--no-execute-only' ;; #(
   *) :
      ;;
 esac
