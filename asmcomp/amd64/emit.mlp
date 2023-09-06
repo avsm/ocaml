@@ -811,6 +811,7 @@ let emit_instr env fallthrough i =
       I.movsxd (mem64 DWORD 0 (arg64 i 0) ~scale:4 ~base:(reg64 tmp1))
                (reg env tmp2);
       I.add (reg env tmp2) (reg env tmp1);
+      I.notrack ();
       I.jmp (reg env tmp1);
 
       begin match system with

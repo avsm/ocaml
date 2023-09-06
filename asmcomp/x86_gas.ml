@@ -201,6 +201,7 @@ let print_instr b = function
   | MULSD (arg1, arg2) -> i2 b "mulsd" arg1 arg2
   | NEG arg -> i1 b "neg" arg
   | NOP -> i0 b "nop"
+  | NOTRACK -> i0 b "notrack"
   | OR (arg1, arg2) -> i2_s b "or" arg1 arg2
   | POP  arg -> i1_s b "pop" arg
   | PUSH arg -> i1_s b "push" arg

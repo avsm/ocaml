@@ -178,6 +178,7 @@ type instruction =
   | MULSD of arg * arg
   | NEG of arg
   | NOP
+  | NOTRACK
   | OR of arg * arg
   | POP of arg
   | PUSH of arg

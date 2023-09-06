@@ -196,6 +196,7 @@ let print_instr b = function
   | MULSD (arg1, arg2) -> i2 b "mulsd" arg1 arg2
   | NEG arg -> i1 b "neg" arg
   | NOP -> i0 b "nop"
+  | NOTRACK -> i0 b "notrack" (* TODO does masm support this? *)
   | OR (arg1, arg2) -> i2 b "or" arg1 arg2
   | POP arg -> i1 b "pop" arg
   | PUSH arg -> i1 b "push" arg

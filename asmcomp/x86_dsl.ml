@@ -190,6 +190,7 @@ module I = struct
   let mulsd x y = emit (MULSD (x, y))
   let neg x = emit (NEG x)
   let nop () = emit NOP
+  let notrack () = emit NOTRACK
   let or_ x y = emit (OR (x, y))
   let pop x = emit (POP x)
   let push x = emit (PUSH x)

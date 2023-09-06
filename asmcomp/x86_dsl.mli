@@ -183,6 +183,7 @@ module I : sig
   val mulsd: arg -> arg -> unit
   val neg : arg -> unit
   val nop: unit -> unit
+  val notrack : unit -> unit
   val or_: arg -> arg -> unit
   val pop: arg -> unit
   val push: arg -> unit
