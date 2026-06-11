@@ -1035,7 +1035,8 @@ CAMLexport value caml_input_val_from_bytes(value str, intnat ofs)
   /* Initialize global state */
   intern_init(s, &Byte_u(str, ofs), caml_string_length(str) - ofs, NULL);
   caml_parse_header(s, "input_val_from_string", &h);
-  if (ofs + h.header_len + h.data_len > caml_string_length(str))
+  mlsize_t avail = caml_string_length(str) - ofs;
+  if (h.header_len > avail || h.data_len > avail - h.header_len)
     caml_failwith("input_val_from_string: bad length");
   /* Allocate result */
   intern_alloc_storage(s, h.whsize, h.num_objects);
@@ -1077,7 +1078,7 @@ static value caml_input_value_from_buffer(const char * fun_name,
 
   intern_init(s, src, len, input);
   caml_parse_header(s, fun_name, &h);
-  if (h.header_len + h.data_len > len)
+  if (h.header_len > len || h.data_len > len - h.header_len)
     intern_failwith2(fun_name, "bad length");
   s->intern_src_end = s->intern_src + h.data_len;
   return input_val_from_block(s, &h);
