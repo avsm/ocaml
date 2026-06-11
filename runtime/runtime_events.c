@@ -143,7 +143,23 @@ void caml_runtime_events_init(void) {
     runtime_events_path = caml_stat_strdup_os(runtime_events_path);
   }
 
-  ring_size_words = 1 << caml_params->runtime_events_log_wsize;
+  {
+    uintnat const max_words =
+      ((uintnat)1 << 30) / sizeof(uint64_t) / caml_params->max_domains;
+    uintnat const requested = caml_params->runtime_events_log_wsize;
+    uintnat max_e = 0;
+    while (((uintnat)2 << max_e) <= max_words) max_e++;
+    uintnat const e = requested < max_e ? requested : max_e;
+    if (e != requested) {
+      fprintf(stderr,
+              "OCAMLRUNPARAM: runtime_events ring size e=%llu is too large "
+              "for d=%llu domains; clamping to e=%llu.\n",
+              (unsigned long long) requested,
+              (unsigned long long) caml_params->max_domains,
+              (unsigned long long) e);
+    }
+    ring_size_words = (int)((uintnat)1 << e);
+  }
 
   preserve_ring =
             caml_secure_getenv(T("OCAML_RUNTIME_EVENTS_PRESERVE")) ? 1 : 0;
