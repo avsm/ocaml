@@ -104,6 +104,7 @@ META
 /lex/parser.ml
 /lex/parser.mli
 /lex/lexer.ml
+/odoc_parser/odoc_parser_lexer.ml
 /lex/ocamllex
 /lex/ocamllex.opt
 /lex/parser.output

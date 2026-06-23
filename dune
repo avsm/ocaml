@@ -37,7 +37,7 @@
  (name ocamlcommon)
  (wrapped false)
  (flags (:standard -principal -nostdlib \ -short-paths))
- (libraries stdlib)
+ (libraries stdlib odoc_parser)
  (modules_without_implementation
    annot cmo_format outcometree parsetree value_rec_types)
  (modules

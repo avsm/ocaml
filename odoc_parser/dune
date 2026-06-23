@@ -1,0 +1,8 @@
+(ocamllex
+ (modules odoc_parser_lexer))
+
+(library
+ (name odoc_parser)
+ (wrapped false)
+ (flags (:standard -nostdlib -w -a))
+ (libraries stdlib))

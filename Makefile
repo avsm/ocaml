@@ -34,7 +34,7 @@ include stdlib/StdlibModules
 CAMLC = $(BOOT_OCAMLC) $(BOOT_STDLIBFLAGS) -use-prims runtime/primitives
 CAMLOPT=$(OCAMLRUN) ./ocamlopt$(EXE) $(STDLIBFLAGS) -I otherlibs/dynlink
 ARCHES=amd64 arm64 power s390x riscv
-VPATH = utils parsing typing bytecomp file_formats lambda middle_end \
+VPATH = utils parsing odoc_parser typing bytecomp file_formats lambda middle_end \
   middle_end/closure middle_end/flambda middle_end/flambda/base_types \
   asmcomp driver toplevel tools runtime \
   $(addprefix otherlibs/, $(ALL_OTHERLIBS))
@@ -109,6 +109,23 @@ parsing_SOURCES = $(addprefix parsing/, \
   attr_helper.mli attr_helper.ml \
   ast_invariants.mli ast_invariants.ml \
   depend.mli depend.ml)
+
+# Vendored odoc documentation-comment parser (stdlib-only). Helper modules are
+# namespaced Odoc_parser_*, with `Odoc_parser` as the public entry point.
+odocparser_SOURCES = $(addprefix odoc_parser/, \
+  odoc_parser_loc.mli odoc_parser_loc.ml \
+  odoc_parser_stream.mli odoc_parser_stream.ml \
+  odoc_parser_token.mli odoc_parser_token.ml \
+  odoc_parser_warning.mli odoc_parser_warning.ml \
+  odoc_parser_parse_error.mli odoc_parser_parse_error.ml \
+  odoc_parser_lexer.mli odoc_parser_lexer.mll \
+  odoc_parser_ast.mli odoc_parser_ast.ml \
+  odoc_parser_syntax.mli odoc_parser_syntax.ml \
+  odoc_parser.mli odoc_parser.ml)
+
+# Vendored third-party code: compile without the compiler's strict warning set
+# (it is not written to the -principal / warn-error standard used internally).
+odoc_parser/%: OC_COMMON_COMPFLAGS += -w -a
 
 typing_SOURCES = \
   typing/annot.mli \
@@ -207,7 +224,7 @@ comp_SOURCES = \
 # ocamlcommon library so that ocamlobjinfo can depend on them.
 
 ocamlcommon_SOURCES = \
-  $(utils_SOURCES) $(parsing_SOURCES) $(typing_SOURCES) \
+  $(utils_SOURCES) $(parsing_SOURCES) $(odocparser_SOURCES) $(typing_SOURCES) \
   $(lambda_SOURCES) $(comp_SOURCES)
 
 ocamlbytecomp_SOURCES = \
@@ -2765,7 +2782,7 @@ $(foreach file, asmcomp/emit.ml $(ARCH_SPECIFIC),\
   $(eval $(call MV_FILE,$(file).depend,$(file))))
 
 DEP_DIRS = \
-  utils parsing typing bytecomp asmcomp middle_end lambda file_formats \
+  utils parsing odoc_parser typing bytecomp asmcomp middle_end lambda file_formats \
   middle_end/closure middle_end/flambda middle_end/flambda/base_types driver \
   toplevel toplevel/byte toplevel/native lex tools debugger ocamldoc ocamltest \
   testsuite/lib testsuite/tools otherlibs/dynlink

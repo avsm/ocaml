@@ -580,6 +580,114 @@ parsing/unit_info.cmx : \
     utils/config.cmx \
     parsing/unit_info.cmi
 parsing/unit_info.cmi :
+odoc_parser/odoc_parser.cmo : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_syntax.cmi \
+    odoc_parser/odoc_parser_stream.cmi \
+    odoc_parser/odoc_parser_parse_error.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_lexer.cmi \
+    odoc_parser/odoc_parser_ast.cmi \
+    odoc_parser/odoc_parser.cmi
+odoc_parser/odoc_parser.cmx : \
+    odoc_parser/odoc_parser_warning.cmx \
+    odoc_parser/odoc_parser_syntax.cmx \
+    odoc_parser/odoc_parser_stream.cmx \
+    odoc_parser/odoc_parser_parse_error.cmx \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser_lexer.cmx \
+    odoc_parser/odoc_parser_ast.cmx \
+    odoc_parser/odoc_parser.cmi
+odoc_parser/odoc_parser.cmi : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_ast.cmi
+odoc_parser/odoc_parser_ast.cmo : \
+    odoc_parser/odoc_parser_token.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_ast.cmi
+odoc_parser/odoc_parser_ast.cmx : \
+    odoc_parser/odoc_parser_token.cmx \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser_ast.cmi
+odoc_parser/odoc_parser_ast.cmi : \
+    odoc_parser/odoc_parser_token.cmi \
+    odoc_parser/odoc_parser_loc.cmi
+odoc_parser/odoc_parser_lexer.cmo : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_token.cmi \
+    odoc_parser/odoc_parser_parse_error.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_lexer.cmi
+odoc_parser/odoc_parser_lexer.cmx : \
+    odoc_parser/odoc_parser_warning.cmx \
+    odoc_parser/odoc_parser_token.cmx \
+    odoc_parser/odoc_parser_parse_error.cmx \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser_lexer.cmi
+odoc_parser/odoc_parser_lexer.cmi : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_token.cmi \
+    odoc_parser/odoc_parser_loc.cmi
+odoc_parser/odoc_parser_loc.cmo : \
+    odoc_parser/odoc_parser_loc.cmi
+odoc_parser/odoc_parser_loc.cmx : \
+    odoc_parser/odoc_parser_loc.cmi
+odoc_parser/odoc_parser_loc.cmi :
+odoc_parser/odoc_parser_parse_error.cmo : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_parse_error.cmi
+odoc_parser/odoc_parser_parse_error.cmx : \
+    odoc_parser/odoc_parser_warning.cmx \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser_parse_error.cmi
+odoc_parser/odoc_parser_parse_error.cmi : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_loc.cmi
+odoc_parser/odoc_parser_stream.cmo : \
+    odoc_parser/odoc_parser_stream.cmi
+odoc_parser/odoc_parser_stream.cmx : \
+    odoc_parser/odoc_parser_stream.cmi
+odoc_parser/odoc_parser_stream.cmi :
+odoc_parser/odoc_parser_syntax.cmo : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_token.cmi \
+    odoc_parser/odoc_parser_stream.cmi \
+    odoc_parser/odoc_parser_parse_error.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_ast.cmi \
+    odoc_parser/odoc_parser_syntax.cmi
+odoc_parser/odoc_parser_syntax.cmx : \
+    odoc_parser/odoc_parser_warning.cmx \
+    odoc_parser/odoc_parser_token.cmx \
+    odoc_parser/odoc_parser_stream.cmx \
+    odoc_parser/odoc_parser_parse_error.cmx \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser_ast.cmx \
+    odoc_parser/odoc_parser_syntax.cmi
+odoc_parser/odoc_parser_syntax.cmi : \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_token.cmi \
+    odoc_parser/odoc_parser_stream.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_ast.cmi
+odoc_parser/odoc_parser_token.cmo : \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_token.cmi
+odoc_parser/odoc_parser_token.cmx : \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser_token.cmi
+odoc_parser/odoc_parser_token.cmi : \
+    odoc_parser/odoc_parser_loc.cmi
+odoc_parser/odoc_parser_warning.cmo : \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser_warning.cmi
+odoc_parser/odoc_parser_warning.cmx : \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser_warning.cmi
+odoc_parser/odoc_parser_warning.cmi : \
+    odoc_parser/odoc_parser_loc.cmi
 typing/annot.cmi : \
     parsing/location.cmi
 typing/btype.cmo : \
