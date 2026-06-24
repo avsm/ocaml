@@ -43,6 +43,10 @@ val docstring_body : docstring -> string
 (** Get the location of a docstring *)
 val docstring_loc : docstring -> Location.t
 
+(** Parse the body of a docstring with the odoc-syntax parser. The result is
+    cached on the docstring. *)
+val parsed : docstring -> Odoc_parser.Ast.t
+
 (** {2 Set functions}
 
    These functions are used by the lexer to associate docstrings to

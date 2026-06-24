@@ -402,15 +402,22 @@ parsing/depend.cmi : \
 parsing/docstrings.cmo : \
     utils/warnings.cmi \
     parsing/parsetree.cmi \
+    odoc_parser/odoc_parser_warning.cmi \
+    odoc_parser/odoc_parser_loc.cmi \
+    odoc_parser/odoc_parser.cmi \
     parsing/location.cmi \
     parsing/docstrings.cmi
 parsing/docstrings.cmx : \
     utils/warnings.cmx \
     parsing/parsetree.cmi \
+    odoc_parser/odoc_parser_warning.cmx \
+    odoc_parser/odoc_parser_loc.cmx \
+    odoc_parser/odoc_parser.cmx \
     parsing/location.cmx \
     parsing/docstrings.cmi
 parsing/docstrings.cmi : \
     parsing/parsetree.cmi \
+    odoc_parser/odoc_parser.cmi \
     parsing/location.cmi
 parsing/lexer.cmo : \
     utils/warnings.cmi \

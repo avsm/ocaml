@@ -224,7 +224,7 @@ comp_SOURCES = \
 # ocamlcommon library so that ocamlobjinfo can depend on them.
 
 ocamlcommon_SOURCES = \
-  $(utils_SOURCES) $(parsing_SOURCES) $(odocparser_SOURCES) $(typing_SOURCES) \
+  $(utils_SOURCES) $(odocparser_SOURCES) $(parsing_SOURCES) $(typing_SOURCES) \
   $(lambda_SOURCES) $(comp_SOURCES)
 
 ocamlbytecomp_SOURCES = \

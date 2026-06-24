@@ -35,29 +35,69 @@ type docstring =
   { ds_body: string;
     ds_loc: Location.t;
     mutable ds_attached: ds_attached;
-    mutable ds_associated: ds_associated; }
+    mutable ds_associated: ds_associated;
+    mutable ds_parsed: Odoc_parser.t option; }
 
 (* List of docstrings *)
 
 let docstrings : docstring list ref = ref []
 
-(* Warn for unused and ambiguous docstrings *)
+(* Parse the body of a docstring with the odoc-syntax parser, caching the
+   result on the docstring. *)
+let parse_docstring ds =
+  match ds.ds_parsed with
+  | Some t -> t
+  | None ->
+      (* [ds_loc] starts at the opening "(**"; the body begins 3 columns in. *)
+      let (s : Lexing.position) = ds.ds_loc.loc_start in
+      let location = { s with pos_cnum = s.pos_cnum + 3 } in
+      let t = Odoc_parser.parse_comment ~location ~text:ds.ds_body in
+      ds.ds_parsed <- Some t;
+      t
+
+let parsed ds = Odoc_parser.ast (parse_docstring ds)
+
+(* Warn for unattached and ambiguous docstrings *)
+let warn_doc_placement () =
+  List.iter
+    (fun ds ->
+       match ds.ds_attached with
+       | Info -> ()
+       | Unattached ->
+         prerr_warning ds.ds_loc (Warnings.Unexpected_docstring true)
+       | Docs ->
+           match ds.ds_associated with
+           | Zero | One -> ()
+           | Many ->
+             prerr_warning ds.ds_loc (Warnings.Unexpected_docstring false))
+    (List.rev !docstrings)
+
+(* Report odoc-syntax problems in docstring bodies as standard compiler
+   warnings (warning 76 [doc-comment]; non-fatal by default). *)
+let warn_doc_syntax () =
+  let emit t (w : Odoc_parser_warning.t) =
+    let conv = Odoc_parser.position_of_point t in
+    let span = w.Odoc_parser_warning.location in
+    let loc =
+      { Location.loc_start = conv span.Odoc_parser_loc.start;
+        loc_end = conv span.Odoc_parser_loc.end_;
+        loc_ghost = false }
+    in
+    prerr_warning loc (Warnings.Doc_comment w.Odoc_parser_warning.message)
+  in
+  List.iter
+    (fun ds ->
+       if ds.ds_body <> "" then begin
+         let t = parse_docstring ds in
+         List.iter (emit t) (Odoc_parser.warnings t)
+       end)
+    (List.rev !docstrings)
 
 let warn_bad_docstrings () =
-  if Warnings.is_active (Warnings.Unexpected_docstring true) then begin
-    List.iter
-      (fun ds ->
-         match ds.ds_attached with
-         | Info -> ()
-         | Unattached ->
-           prerr_warning ds.ds_loc (Warnings.Unexpected_docstring true)
-         | Docs ->
-             match ds.ds_associated with
-             | Zero | One -> ()
-             | Many ->
-               prerr_warning ds.ds_loc (Warnings.Unexpected_docstring false))
-      (List.rev !docstrings)
-end
+  if Warnings.is_active (Warnings.Unexpected_docstring true) then
+    warn_doc_placement ();
+  if Warnings.is_active (Warnings.Doc_comment "") then
+    warn_doc_syntax ()
 
 (* Docstring constructors and destructors *)
 
@@ -66,7 +106,8 @@ let docstring body loc =
     { ds_body = body;
       ds_loc = loc;
       ds_attached = Unattached;
-      ds_associated = Zero; }
+      ds_associated = Zero;
+      ds_parsed = None; }
   in
   ds
 
