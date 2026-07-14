@@ -595,6 +595,25 @@ void caml_free_stack (struct stack_info* stack)
   }
 }
 
+void caml_free_stack_cache (struct stack_info** cache)
+{
+  for (int i = 0; i < NUM_STACK_SIZE_CLASSES; i++) {
+    struct stack_info* stk = cache[i];
+    while (stk != NULL) {
+      struct stack_info* next = (struct stack_info*)stk->exception_ptr;
+      atomic_fetch_sub(&live_stack_counter,
+                       (value*)(stk->handler+1) - (value*)stk);
+#ifdef USE_MMAP_MAP_STACK
+      munmap(stk, stk->size);
+#else
+      caml_stat_free(stk);
+#endif
+      stk = next;
+    }
+  }
+  caml_stat_free(cache);
+}
+
 void caml_free_gc_regs_buckets(value *gc_regs_buckets)
 {
   while (gc_regs_buckets != NULL) {

@@ -1006,6 +1006,8 @@ static void domain_create(uintnat initial_minor_heap_wsize,
   goto domain_init_complete;
 
 alloc_main_stack_failure:
+  caml_free_stack_cache(domain_state->stack_cache);
+  domain_state->stack_cache = NULL;
 create_stack_cache_failure:
   caml_remove_generational_global_root(&domain_state->dls_root);
   free_minor_heap_arena();
@@ -2409,6 +2411,8 @@ void caml_domain_terminate(bool last)
   }
   caml_free_backtrace_buffer(domain_state->backtrace_buffer);
   caml_free_gc_regs_buckets(domain_state->gc_regs_buckets);
+  caml_free_stack_cache(domain_state->stack_cache);
+  domain_state->stack_cache = NULL;
 
   /* signal the domain termination to the backup thread
      NB: for a program with no additional domains, the backup thread
